@@ -26,8 +26,29 @@ class ReservationService {
     return reservation;
   }
 
-  static async findAllReservations(query: ReservationInput) {
-    const reservation = await Reservation.findAll({ where: query });
+  static async findAllReservations(
+    reservationQuery: ReservationInput,
+  ) {
+    const reservation = await Reservation.findAll({
+      where: reservationQuery,
+      include: [
+        {
+          model: Staff,
+          as: "checkInStaff",
+          attributes: ["id", "first_name", "last_name"],
+        },
+        {
+          model: Staff,
+          as: "checkOutStaff",
+          attributes: ["id", "first_name", "last_name"],
+        },
+        {
+          model: Customer,
+          as: "customer",
+          attributes: ["id", "first_name", "last_name"],
+        },
+      ],
+    });
     return reservation;
   }
 

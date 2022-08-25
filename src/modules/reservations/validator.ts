@@ -49,6 +49,26 @@ class ReservationValidator {
       );
     return next();
   }
+
+  static async singleValidation(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const schema = Joi.object({
+      id: Joi.number().required(),
+    });
+
+    const { error } = schema.validate(req.params);
+    if (error)
+      return handleResponse(
+        req,
+        res,
+        { status: "error", message: error.message },
+        422
+      );
+    return next();
+  }
 }
 
 export default ReservationValidator;

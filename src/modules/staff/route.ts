@@ -1,6 +1,5 @@
 import { Router } from "express";
-import verifyStaff from "../../middlewares/verifyStaff";
-import verifySuperStaff from "../../middlewares/verifySuperStaff";
+import { verifyStaff, verifySuperStaff } from "../../middlewares";
 import StaffController from "./controller";
 import AuthValidator from "./validator";
 

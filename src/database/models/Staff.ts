@@ -6,6 +6,7 @@ interface StaffAttributes {
   first_name: string;
   last_name: string;
   email: string;
+  password: string;
   phone_number?: string;
   last_login?: Date;
   is_active?: boolean;
@@ -24,6 +25,7 @@ class Staff
   public first_name!: string;
   public last_name!: string;
   public email!: string;
+  public password!: string;
   public phone_number!: string;
   public last_login!: Date;
   public is_active!: boolean;
@@ -54,6 +56,10 @@ Staff.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     phone_number: {
       type: DataTypes.STRING,

@@ -32,4 +32,11 @@ router.get(
   ReservationController.viewReservation
 );
 
+router.get(
+  "/:id/checkout",
+  verifyStaff,
+  ReservationValidator.singleValidation,
+  ReservationController.checkOutReservation
+);
+
 export default router;

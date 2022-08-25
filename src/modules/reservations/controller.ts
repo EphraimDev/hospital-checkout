@@ -5,6 +5,9 @@ import { IGetUserAuthInfoRequest } from "../../../types/express";
 import handleResponse from "../../middlewares/handleResponse";
 import StaffService from "../staff/service";
 import sequelize, { Op } from "sequelize";
+import moment from "moment";
+import getDates from "../../utils/getAllDatesBetweenTwoDates";
+import calculateOverstayFee from "../../utils/calculateOverstayAmount";
 
 dotenv.config();
 
@@ -133,6 +136,74 @@ class ReservationController {
         {
           status: "success",
           message: "Reservation fetched successfully",
+          data: reservation,
+        },
+        200
+      );
+    } catch (error: any) {
+      return handleResponse(
+        req,
+        res,
+        { status: "error", message: error.message },
+        500
+      );
+    }
+  }
+
+  static async checkOutReservation(
+    req: IGetUserAuthInfoRequest,
+    res: Response
+  ) {
+    try {
+      const { id } = req.params;
+      const staff = req.staff;
+
+      let reservation = await ReservationService.findOneReservation({
+        reservation_id: Number(id),
+      });
+
+      if (!reservation)
+        return handleResponse(
+          req,
+          res,
+          {
+            status: "error",
+            message: "Reservation does not exist",
+          },
+          404
+        );
+
+      if (reservation.time_checked_out)
+        return handleResponse(
+          req,
+          res,
+          {
+            status: "error",
+            message: "Reservation has been checked out already",
+          },
+          400
+        );
+      let overstay_cost = 0;
+      if (new Date() > new Date(reservation.checkout_time)) {
+        const all_dates = getDates(moment(reservation.checkout_time));
+        overstay_cost = calculateOverstayFee(
+          all_dates,
+          reservation.room_type,
+          Number(reservation.amount_paid)
+        );
+      }
+
+      reservation = await ReservationService.updateReservation(reservation, {
+        staff_checked_out: staff?.id,
+        total_amount: Number(reservation.amount_paid) + overstay_cost,
+        time_checked_out: new Date(),
+      });
+      return handleResponse(
+        req,
+        res,
+        {
+          status: "success",
+          message: "Reservation checked out successfully",
           data: reservation,
         },
         200

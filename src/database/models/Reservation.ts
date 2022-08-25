@@ -13,7 +13,7 @@ interface ReservationAttributes {
   staff_checked_in?: number;
   staff_checked_out?: number;
   time_checked_out?: Date | null;
-  total_amount?: string;
+  total_amount?: number;
   room_number?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -35,7 +35,7 @@ class Reservation
   public staff_checked_in!: number;
   public staff_checked_out?: number;
   public time_checked_out?: Date;
-  public total_amount?: string;
+  public total_amount?: number;
   public room_number?: number;
 
   // timestamps!

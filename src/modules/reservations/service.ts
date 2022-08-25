@@ -26,9 +26,7 @@ class ReservationService {
     return reservation;
   }
 
-  static async findAllReservations(
-    reservationQuery: ReservationInput,
-  ) {
+  static async findAllReservations(reservationQuery: ReservationInput) {
     const reservation = await Reservation.findAll({
       where: reservationQuery,
       include: [
@@ -68,7 +66,9 @@ class ReservationService {
       }
     }
     await reservation.save();
-    return reservation;
+    return this.findOneReservation({
+      reservation_id: reservation.reservation_id,
+    });
   }
 }
 

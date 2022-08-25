@@ -1,9 +1,13 @@
 import { Response } from "express";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 import StaffService from "./service";
 import { IGetUserAuthInfoRequest } from "../../../types/express";
 import AccessToken from "../../utils/accessToken";
 import handleResponse from "../../middlewares/handleResponse";
+import random from "../../utils/randomString";
+
+dotenv.config();
 
 class StaffController {
   static async login(req: IGetUserAuthInfoRequest, res: Response) {
@@ -61,14 +65,14 @@ class StaffController {
         res,
         {
           status: "success",
-          message: "User signed in successfully",
+          message: "Staff signed in successfully",
           data: {
             user: {
-              firstName: staff.first_name,
-              lastName: staff.last_name,
+              first_name: staff.first_name,
+              last_name: staff.last_name,
               id: staff.id,
               email: staff.email,
-              phoneNumber: staff.phone_number,
+              phone_number: staff.phone_number,
             },
             accessToken,
           },
@@ -76,7 +80,59 @@ class StaffController {
         200
       );
     } catch (error: any) {
-      console.log(error);
+      return handleResponse(
+        req,
+        res,
+        { status: "error", message: error.message },
+        500
+      );
+    }
+  }
+  static async addStaff(req: IGetUserAuthInfoRequest, res: Response) {
+    try {
+      const { first_name, last_name, email, phone_number } = req.body;
+      let staff = await StaffService.findOneStaff({
+        email,
+      });
+      if (staff)
+        return handleResponse(
+          req,
+          res,
+          { status: "error", message: "Staff already exists" },
+          400
+        );
+      const password = await random(5);
+      const hashedPassword = bcrypt.hashSync(
+        password,
+        Number(process.env.BCRYPT_SALT)
+      );
+
+      staff = await StaffService.createStaff({
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        password: hashedPassword,
+      });
+
+      return handleResponse(
+        req,
+        res,
+        {
+          status: "success",
+          message: "Staff added successfully",
+          data: {
+            first_name: staff.first_name,
+            last_name: staff.last_name,
+            id: staff.id,
+            email: staff.email,
+            phone_number: staff.phone_number,
+            password,
+          },
+        },
+        201
+      );
+    } catch (error: any) {
       return handleResponse(
         req,
         res,

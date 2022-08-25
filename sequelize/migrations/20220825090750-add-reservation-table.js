@@ -28,6 +28,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      room_number: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       checking_time: {
         type: Sequelize.DATE,
         allowNull: false,

@@ -3,8 +3,8 @@ import sequelizeConnection from "../config";
 
 interface CustomerAttributes {
   id: number;
-  first_name: string;
-  last_name: string;
+  first_name?: string;
+  last_name?: string;
   email?: string;
   phone_number?: string;
   createdAt?: Date;
@@ -52,6 +52,7 @@ Customer.init(
     phone_number: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
   },
   {

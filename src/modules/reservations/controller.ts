@@ -4,6 +4,7 @@ import ReservationService from "./service";
 import { IGetUserAuthInfoRequest } from "../../../types/express";
 import handleResponse from "../../middlewares/handleResponse";
 import StaffService from "../staff/service";
+import sequelize, { Op } from "sequelize";
 
 dotenv.config();
 
@@ -40,7 +41,7 @@ class ReservationController {
         customer_id: customer.id,
         checking_time: new Date(),
         staff_checked_in: staff?.id,
-        total_amount: amount_paid
+        total_amount: amount_paid,
       });
 
       return handleResponse(
@@ -52,6 +53,51 @@ class ReservationController {
           data: reservation,
         },
         201
+      );
+    } catch (error: any) {
+      return handleResponse(
+        req,
+        res,
+        { status: "error", message: error.message },
+        500
+      );
+    }
+  }
+
+  static async viewReservations(req: IGetUserAuthInfoRequest, res: Response) {
+    try {
+      const { status, checking_time, checkout_time, room_type, room_number } =
+        req.query;
+      const query: any = {};
+      if (status === "running") query.time_checked_out = null;
+      else if (status === "checkedout")
+        query.time_checked_out = { [Op.ne]: null };
+      if (checking_time)
+        query.checking_time = sequelize.where(
+          sequelize.cast(sequelize.col("checking_time"), "DATE"),
+          "=",
+          checking_time
+        );
+      if (checkout_time)
+        query.checkout_time = sequelize.where(
+          sequelize.cast(sequelize.col("checkout_time"), "DATE"),
+          "=",
+          checkout_time
+        );
+      if (room_type) query.room_type = room_type;
+      if (room_number) query.room_number = room_number;
+
+      let reservation = await ReservationService.findAllReservations(query);
+
+      return handleResponse(
+        req,
+        res,
+        {
+          status: "success",
+          message: "Reservations fetched successfully",
+          data: reservation,
+        },
+        200
       );
     } catch (error: any) {
       return handleResponse(

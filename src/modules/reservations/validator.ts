@@ -29,6 +29,26 @@ class ReservationValidator {
       );
     return next();
   }
+
+  static async allValidation(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      status: Joi.string().optional(),
+      checking_time: Joi.date().optional(),
+      room_type: Joi.string().optional(),
+      room_number: Joi.number().optional(),
+      checkout_time: Joi.date().optional(),
+    });
+
+    const { error } = schema.validate(req.query);
+    if (error)
+      return handleResponse(
+        req,
+        res,
+        { status: "error", message: error.message },
+        422
+      );
+    return next();
+  }
 }
 
 export default ReservationValidator;

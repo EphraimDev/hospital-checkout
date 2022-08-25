@@ -6,12 +6,19 @@ import ReservationValidator from "./validator";
 const router = Router();
 
 router.post(
-  "/create",
+  "/",
   verifyStaff,
   ReservationValidator.createValidation,
   verifyRoomAvailability,
   validateRoomType,
   ReservationController.reserveRoom
+);
+
+router.get(
+  "/",
+  verifyStaff,
+  ReservationValidator.allValidation,
+  ReservationController.viewReservations
 );
 
 export default router;

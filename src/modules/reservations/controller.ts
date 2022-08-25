@@ -87,7 +87,7 @@ class ReservationController {
       if (room_type) query.room_type = room_type;
       if (room_number) query.room_number = room_number;
 
-      let reservation = await ReservationService.findAllReservations(query);
+      let reservations = await ReservationService.findAllReservations(query);
 
       return handleResponse(
         req,
@@ -95,6 +95,44 @@ class ReservationController {
         {
           status: "success",
           message: "Reservations fetched successfully",
+          data: reservations,
+        },
+        200
+      );
+    } catch (error: any) {
+      return handleResponse(
+        req,
+        res,
+        { status: "error", message: error.message },
+        500
+      );
+    }
+  }
+
+  static async viewReservation(req: IGetUserAuthInfoRequest, res: Response) {
+    try {
+      const { id } = req.params;
+
+      let reservation = await ReservationService.findOneReservation({
+        reservation_id: Number(id),
+      });
+
+      if (!reservation)
+        return handleResponse(
+          req,
+          res,
+          {
+            status: "error",
+            message: "Reservation does not exist",
+          },
+          404
+        );
+      return handleResponse(
+        req,
+        res,
+        {
+          status: "success",
+          message: "Reservation fetched successfully",
           data: reservation,
         },
         200

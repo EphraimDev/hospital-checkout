@@ -11,6 +11,7 @@ interface StaffAttributes {
   last_login?: Date;
   is_active?: boolean;
   access_token?: string;
+  role?: string;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
@@ -30,6 +31,7 @@ class Staff
   public last_login!: Date;
   public is_active!: boolean;
   public access_token!: string;
+  public role!: string;
 
   // timestamps!
   public readonly createdAt!: Date;
@@ -64,6 +66,10 @@ Staff.init(
     phone_number: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: "STAFF"
     },
     last_login: {
       type: DataTypes.DATE,

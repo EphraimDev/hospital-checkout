@@ -19,6 +19,7 @@ module.exports = {
         email: "super@spleet.africa",
         password: bcrypt.hashSync("secret", Number(process.env.BCRYPT_SALT)),
         phone_number: "07030000",
+        role: "SUPER",
         createdAt: new Date(),
         updatedAt: new Date(),
       },

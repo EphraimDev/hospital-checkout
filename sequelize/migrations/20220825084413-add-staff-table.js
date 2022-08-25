@@ -36,6 +36,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      role: {
+        type: Sequelize.STRING,
+        defaultValue: "STAFF"
+      },
       last_login: { type: Sequelize.DATE, allowNull: true },
       is_active: {
         type: Sequelize.BOOLEAN,

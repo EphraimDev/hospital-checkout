@@ -7,6 +7,7 @@ import rTracer from "cls-rtracer";
 import { handleGracefulShutdown } from "./src/internals";
 import logger from "./src/utils/logger";
 import initializeDB from "./src/database";
+import appRoutes from "./src/routes";
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ app.use(rTracer.expressMiddleware());
 app.get("/", (_req: Request, res: Response) => {
   res.send("Hospital Checkout Server");
 });
+
+app.use("/api/v1", appRoutes)
 
 app.use("*", (_req: Request, res: Response) => {
   res.status(404).send("This route does not exist");

@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional, BelongsToOptions } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import sequelizeConnection from "../config";
 import Staff from "./Staff";
 
@@ -31,33 +31,15 @@ class Reservation
   public checking_time!: Date;
   public checkout_time!: Date;
   public staff_checked_in!: number;
-  staff_checked_out?: number;
-  time_checked_out?: Date;
-  total_amount?: string;
+  public staff_checked_out?: number;
+  public time_checked_out?: Date;
+  public total_amount?: string;
 
   // timestamps!
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
   public readonly deletedAt!: Date;
 }
-
-Reservation.belongsTo(Staff, {
-  as: "checkInStaff",
-  foreignKey: "id",
-  targetKey: "staff_checked_in",
-});
-
-Reservation.belongsTo(Staff, {
-  as: "checkOutStaff",
-  foreignKey: "id",
-  targetKey: "staff_checked_out",
-});
-
-Reservation.belongsTo(Staff, {
-  as: "customer",
-  foreignKey: "id",
-  targetKey: "customer_id",
-});
 
 Reservation.init(
   {
@@ -109,5 +91,23 @@ Reservation.init(
     paranoid: true,
   }
 );
+
+Reservation.belongsTo(Staff, {
+  as: "checkInStaff",
+  targetKey: "id",
+  foreignKey: "staff_checked_in",
+});
+
+Reservation.belongsTo(Staff, {
+  as: "checkOutStaff",
+  targetKey: "id",
+  foreignKey: "staff_checked_out",
+});
+
+Reservation.belongsTo(Staff, {
+  as: "customer",
+  targetKey: "id",
+  foreignKey: "customer_id",
+});
 
 export default Reservation;

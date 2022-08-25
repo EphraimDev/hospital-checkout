@@ -3,10 +3,10 @@ import sequelizeConnection from "../config";
 
 interface StaffAttributes {
   id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  password?: string;
   phone_number?: string;
   last_login?: Date;
   is_active?: boolean;

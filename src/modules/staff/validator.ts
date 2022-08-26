@@ -9,8 +9,8 @@ class StaffValidator {
     next: NextFunction
   ) {
     const schema = Joi.object({
-      email: Joi.string().required(),
-      password: Joi.string().required(),
+      email: Joi.string().trim().email().required(),
+      password: Joi.string().trim().required(),
     });
 
     const { error } = schema.validate(req.body);
@@ -30,10 +30,10 @@ class StaffValidator {
     next: NextFunction
   ) {
     const schema = Joi.object({
-      email: Joi.string().required(),
-      first_name: Joi.string().required(),
-      last_name: Joi.string().required(),
-      phone_number: Joi.string().required(),
+      email: Joi.string().trim().email().required(),
+      first_name: Joi.string().trim().required(),
+      last_name: Joi.string().trim().required(),
+      phone_number: Joi.string().trim().required(),
     });
 
     const { error } = schema.validate(req.body);

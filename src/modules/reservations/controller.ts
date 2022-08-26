@@ -36,14 +36,14 @@ class ReservationController {
           400
         );
       let customer = await StaffService.findOneCustomer({
-        phone_number,
+        phone_number: phone_number.trim(),
       });
       if (!customer) {
         customer = await StaffService.createCustomer({
-          first_name,
-          last_name,
-          email,
-          phone_number,
+          first_name: first_name,
+          last_name: last_name,
+          email: email.trim().toLowerCase(),
+          phone_number: phone_number.trim(),
         });
       }
       let reservation = await ReservationService.createReservation({

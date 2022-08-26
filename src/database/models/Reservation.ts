@@ -15,6 +15,7 @@ interface ReservationAttributes {
   time_checked_out?: Date | null;
   total_amount?: number;
   room_number?: number;
+  status?: string;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
@@ -37,6 +38,7 @@ class Reservation
   public time_checked_out?: Date;
   public total_amount?: number;
   public room_number?: number;
+  public status?: string;
 
   // timestamps!
   public readonly createdAt!: Date;
@@ -72,7 +74,7 @@ Reservation.init(
       allowNull: false,
     },
     checkout_time: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     staff_checked_in: {
@@ -90,6 +92,11 @@ Reservation.init(
     total_amount: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "not paid"
     },
   },
   {

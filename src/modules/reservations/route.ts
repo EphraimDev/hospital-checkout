@@ -39,4 +39,12 @@ router.get(
   ReservationController.checkOutReservation
 );
 
+router.post(
+  "/:id/pay",
+  verifyStaff,
+  ReservationValidator.singleValidation,
+  ReservationValidator.payValidation,
+  ReservationController.payForReservation
+);
+
 export default router;

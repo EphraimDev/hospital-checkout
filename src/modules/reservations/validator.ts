@@ -69,6 +69,26 @@ class ReservationValidator {
       );
     return next();
   }
+
+  static async payValidation(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const schema = Joi.object({
+      overstay_fee: Joi.number().required(),
+    });
+
+    const { error } = schema.validate(req.body);
+    if (error)
+      return handleResponse(
+        req,
+        res,
+        { status: "error", message: error.message },
+        422
+      );
+    return next();
+  }
 }
 
 export default ReservationValidator;

@@ -25,6 +25,16 @@ class ReservationController {
         phone_number,
       } = req.body;
       const staff = req.staff;
+      if (new Date() > new Date(checkout_time))
+        return handleResponse(
+          req,
+          res,
+          {
+            status: "error",
+            message: "Checkout time cannot be less than current time",
+          },
+          400
+        );
       let customer = await StaffService.findOneCustomer({
         phone_number,
       });
@@ -39,7 +49,7 @@ class ReservationController {
       let reservation = await ReservationService.createReservation({
         room_type,
         amount_paid,
-        checkout_time,
+        checkout_time: new Date(checkout_time),
         room_number,
         customer_id: customer.id,
         checking_time: new Date(),
@@ -204,6 +214,90 @@ class ReservationController {
         {
           status: "success",
           message: "Reservation checked out successfully",
+          data: {
+            reservation,
+            overstay_fee:
+              Number(reservation?.total_amount) -
+              Number(reservation?.amount_paid),
+          },
+        },
+        200
+      );
+    } catch (error: any) {
+      return handleResponse(
+        req,
+        res,
+        { status: "error", message: error.message },
+        500
+      );
+    }
+  }
+
+  static async payForReservation(req: IGetUserAuthInfoRequest, res: Response) {
+    try {
+      const { id } = req.params;
+      const { overstay_fee } = req.body;
+
+      let reservation = await ReservationService.findOneReservation({
+        reservation_id: Number(id),
+      });
+
+      if (!reservation)
+        return handleResponse(
+          req,
+          res,
+          {
+            status: "error",
+            message: "Reservation does not exist",
+          },
+          404
+        );
+
+      if (reservation.status === "paid")
+        return handleResponse(
+          req,
+          res,
+          {
+            status: "error",
+            message: "Reservation has been paid already",
+          },
+          400
+        );
+
+      if (!reservation.time_checked_out)
+        return handleResponse(
+          req,
+          res,
+          {
+            status: "error",
+            message: "Reservation has not been checked out",
+          },
+          400
+        );
+      if (
+        Number(reservation.total_amount) - Number(reservation.amount_paid) !==
+        Number(overstay_fee)
+      )
+        return handleResponse(
+          req,
+          res,
+          {
+            status: "error",
+            message:
+              "Overstay fee does not match with the record on the system",
+          },
+          400
+        );
+
+      reservation = await ReservationService.updateReservation(reservation, {
+        status: "paid",
+      });
+      return handleResponse(
+        req,
+        res,
+        {
+          status: "success",
+          message: "Reservation paid successfully",
           data: reservation,
         },
         200

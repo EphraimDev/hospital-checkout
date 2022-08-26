@@ -14,7 +14,7 @@ class StaffController {
     try {
       const { email, password } = req.body;
       let staff = await StaffService.findOneStaff({
-        email,
+        email: email.trim().toLowerCase(),
       });
       if (!staff)
         return handleResponse(
@@ -32,7 +32,7 @@ class StaffController {
           400
         );
 
-      const isPasswordCorrect = bcrypt.compareSync(password, staff.password);
+      const isPasswordCorrect = bcrypt.compareSync(password.trim(), staff.password);
       if (!isPasswordCorrect)
         return handleResponse(
           req,
@@ -92,7 +92,7 @@ class StaffController {
     try {
       const { first_name, last_name, email, phone_number } = req.body;
       let staff = await StaffService.findOneStaff({
-        email,
+        email: email.trim().toLowerCase(),
       });
       if (staff)
         return handleResponse(
@@ -108,10 +108,10 @@ class StaffController {
       );
 
       staff = await StaffService.createStaff({
-        first_name,
-        last_name,
-        email,
-        phone_number,
+        first_name: first_name,
+        last_name: last_name,
+        email: email.trim().toLowerCase(),
+        phone_number: phone_number.trim(),
         password: hashedPassword,
       });
 

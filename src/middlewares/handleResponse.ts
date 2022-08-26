@@ -13,7 +13,19 @@ const handleResponse = async (
   const ipAddress =
     req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   let responseDataAsString = JSON.stringify(payload);
-
+  const body = req.body
+    ? req.body
+    : req.query
+    ? req.query
+    : req.params
+    ? req.params
+    : {};
+  if (body["password"]) delete body["password"];
+  logger(module).info(
+    `request - ${req.method} - ${ipAddress}- ${
+      req.originalUrl
+    } - ${JSON.stringify(body)}`
+  );
   logger(module).info(
     `${statusCode} - ${req.method} - ${ipAddress}- ${req.originalUrl} - ${
       statusCode >= 400 ? responseDataAsString : "success"

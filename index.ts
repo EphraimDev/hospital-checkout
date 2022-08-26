@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === "development")
 app.use(rTracer.expressMiddleware());
 
 app.get("/", (_req: Request, res: Response) => {
-  res.send("Hospital Checkout Server");
+  res.send("Hospitality Checkout Server");
 });
 
 app.use("/api/v1", appRoutes)

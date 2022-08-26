@@ -45,6 +45,10 @@ This is used to check in and checkout customers
 | Checkout reservation | /api/v1/reservations/:id/checkout | GET    |                                                                                                | id     |                                                              |                 reservation id                           |
 | Pay overstay fee     | /api/v1/reservations/:id/pay      | POST   | overstay_fee                                                                                   | id     |                                                              |                     reservation id                        |
 
+## Super Staff
+- email: super@spleet.africa
+- password: secret
+
 ## Stack used
 - Nodejs
 - Typescript

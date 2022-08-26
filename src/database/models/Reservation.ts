@@ -96,13 +96,14 @@ Reservation.init(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: "not paid"
+      defaultValue: "not paid",
     },
   },
   {
     timestamps: true,
     sequelize: sequelizeConnection,
     paranoid: true,
+    tableName: "reservations",
   }
 );
 

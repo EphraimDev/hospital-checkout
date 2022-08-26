@@ -59,6 +59,7 @@ Customer.init(
     timestamps: true,
     sequelize: sequelizeConnection,
     paranoid: true,
+    tableName: "customers",
   }
 );
 

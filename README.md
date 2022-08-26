@@ -4,30 +4,30 @@ This is used to check in and checkout customers
 
 ## Installation Guide
 
-- Clone the project _git clone https://github.com/EphraimDev/hospital-checkout.git_
+- Clone the project *git clone https://github.com/EphraimDev/hospital-checkout.git*
 - Create your .env from the .env.example file
 
-1. For linux run _cp .env.example .env_
-2. For windows run _copy .env.example .env_
+1. For linux run *cp .env.example .env*
+2. For windows run *copy .env.example .env*
 
-- Install dependencies _ npm i_
+- Install dependencies * npm i*
 - Fill your database config in your .env. Please make use of mysql or postgres
 
 ## Migrations
 
-- Run migrations using _npm run migration_
+- Run migrations using *npm run migration*
 
 ## Seeding
 
-- Run seeder using _npm run seed_
+- Run seeder using *npm run seed*
 
 ## Build project
 
-- Run _npm run build_
+- Run *npm run build*
 
 ## Start project
 
-- Run _npm start_
+- Run *npm start*
 
 ## Documentation
 

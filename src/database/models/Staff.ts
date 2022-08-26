@@ -69,7 +69,7 @@ Staff.init(
     },
     role: {
       type: DataTypes.STRING,
-      defaultValue: "STAFF"
+      defaultValue: "STAFF",
     },
     last_login: {
       type: DataTypes.DATE,
@@ -89,6 +89,7 @@ Staff.init(
     sequelize: sequelizeConnection,
     paranoid: true,
     freezeTableName: true,
+    tableName: "staff",
   }
 );
 
